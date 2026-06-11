@@ -1,74 +1,46 @@
 #ifdef ARDUINO
 #include <Arduino.h>
 #include <Wire.h>
-#endif
-
-#if !defined(ARDUINO)
+#include <LiquidCrystal_I2C.h>
+#else
 #include <cstdint>
-#include <cstdio>
+#include <iostream>
 
-using byte = uint8_t;
-const int HEX = 16;
-
-class HardwareSerial {
-public:
-  void begin(int) {}
-  bool operator!() const { return false; }
-  void println(const char* s) { std::puts(s); }
-  void print(const char* s) { std::fputs(s, stdout); }
-  void print(unsigned int value, int base) {
-    if (base == HEX)
-      std::printf("%X", value);
-    else
-      std::printf("%u", value);
-  }
-};
-
-class TwoWire {
-public:
+struct TwoWire {
   void begin(int, int) {}
-  void beginTransmission(uint8_t) {}
-  uint8_t endTransmission() { return 0; }
+} Wire;
+
+class LiquidCrystal_I2C {
+public:
+  LiquidCrystal_I2C(uint8_t, uint8_t, uint8_t) {}
+  void init() {}
+  void backlight() {}
+  void setCursor(int, int) {}
+  void print(const char*) {}
 };
-
-HardwareSerial Serial;
-TwoWire Wire;
-
-inline void delay(unsigned long) {}
 #endif
+
+// Set the LCD address to 0x27.
+// Change to 0x3F if the backlight turns on but no text appears.
+LiquidCrystal_I2C lcd(0x3F, 16, 2);  
 
 void setup() {
-  // Use Keyestudio ESP32 Plus hardware I2C pins
+  // Target the hardware lines directly wired to that bottom-left 4-pin port
   Wire.begin(21, 22);
-  Serial.begin(115200);
-  while (!Serial);
-  Serial.println("\n--- I2C Scanner Ready ---");
+ 
+  // Initialize the screen module
+  lcd.init();                      
+  lcd.backlight();                
+ 
+  // Line 1 text output
+  lcd.setCursor(0, 0);            
+  lcd.print("Hello, World!");      
+ 
+  // Line 2 text output
+  lcd.setCursor(0, 1);            
+  lcd.print("I2C Bus Header OK");
 }
 
 void loop() {
-  byte error, address;
-  int nDevices = 0;
-
-  Serial.println("Scanning for I2C devices...");
-
-  for (address = 1; address < 127; address++) {
-    Wire.beginTransmission(address);
-    error = Wire.endTransmission();
-
-    if (error == 0) {
-      Serial.print("Found I2C device at address: 0x");
-      if (address < 16) Serial.print("0");
-      Serial.print(address, HEX);
-      Serial.println(" !");
-      nDevices++;
-    }
-  }
- 
-  if (nDevices == 0) {
-    Serial.println("No I2C devices found. Check your wiring!\n");
-  } else {
-    Serial.println("Scan complete.\n");
-  }
-
-  delay(3000); // Scan every 3 seconds
+  // No loops required for a static text statement
 }
