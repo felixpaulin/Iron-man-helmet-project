@@ -5,7 +5,7 @@ const int SERVO_PIN = 18;
 
 Servo myServo;
 
-bool servoAt40 = false;
+bool servoAt90 = false;
 bool lastButtonState = HIGH;
 
 void setup() {
@@ -21,8 +21,8 @@ void loop() {
   if (buttonState == LOW && lastButtonState == HIGH) {
     delay(20);
     if (digitalRead(BUTTON_PIN) == LOW) {
-      servoAt40 = !servoAt40;
-      myServo.write(servoAt40 ? 40 : 90);
+      servoAt90 = !servoAt90;
+      myServo.write(servoAt90 ? 90 : 40);
     }
   }
 
