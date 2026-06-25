@@ -1,64 +1,78 @@
 #include <ESP32Servo.h>
 #include <Arduino.h>
 
-const int BUTTON_PIN = 12;
-const int RIGHT_CHEEK_PIN = 18;
-const int LEFT_CHEEK_PIN = 19;
-const int MIDDLE_TOP_PIN = 23;
-const int BOTTOM_SERVO_PIN = 26;
-const int LEFT_TOP_PIN = 17;
-const int RIGHT_TOP_PIN = 25;
+const int buttonPin = 12;
+const int rightCheekPin = 18;
+const int leftCheekPin = 19;
+const int middleTopPin = 23;
+const int bottomServoPin = 26;
+const int leftTopPin = 17;
+const int rightTopPin = 25;
 
-Servo right_cheek;
-Servo left_cheek;
-Servo middle_top;
-Servo bottom_servo;
-Servo left_top;
-Servo right_top;
+Servo rightCheek;
+Servo leftCheek;
+Servo middleTop;
+Servo bottomServo;
+Servo leftTop;
+Servo rightTop;
 
 bool servoAt50 = false;
 bool lastButtonState = HIGH;
 
-const int STEP_DELAY_MS = 10;
-const int TOP_STEP_DELAY_MS = 6;
-const int MIDDLE_TOP_DELAY_MS = 300;
-const int BOTTOM_DELAY_MS = 300;
-const int TOP_DELAY_MS = 300;
+const int smoothTurnMs = 6;
+const int middleTopDelayMs = 300;
+const int bottomDelayMs = 300;
+const int topDelayMs = 300;
 
 // Raw per-servo values so you can manually control each side.
-const int RIGHT_CHEEK_CLOSED = 117;
-const int RIGHT_CHEEK_OPEN = 50;
-const int LEFT_CHEEK_CLOSED = 50;
-const int LEFT_CHEEK_OPEN = 117;
-const int MIDDLE_TOP_CLOSED = 150;
-const int MIDDLE_TOP_OPEN = 30;
-const int BOTTOM_SERVO_CLOSED = 38;
-const int BOTTOM_SERVO_OPEN = 130;
-const int LEFT_TOP_CLOSED = 20;
-const int LEFT_TOP_OPEN = 180;
-const int RIGHT_TOP_CLOSED = 20;
-const int RIGHT_TOP_OPEN = 180;
+const int rightCheekClosed = 117;
+const int rightCheekOpen = 50;
+const int leftCheekClosed = 50;
+const int leftCheekOpen = 117;
+const int middleTopClosed = 150;
+const int middleTopOpen = 30;
+const int bottomServoClosed = 38;
+const int bottomServoOpen = 130;
+const int leftTopClosed = 20;
+const int leftTopOpen = 180;
+const int rightTopClosed = 20;
+const int rightTopOpen = 180;
 
-int leftTopAngle = LEFT_TOP_CLOSED;
-int rightTopAngle = RIGHT_TOP_CLOSED;
+int leftTopAngle = leftTopClosed;
+int rightTopAngle = rightTopClosed;
 
 void moveBothServosTo(int rightAngle, int leftAngle) {
-  right_cheek.attach(RIGHT_CHEEK_PIN);
-  left_cheek.attach(LEFT_CHEEK_PIN);
+  rightCheek.attach(rightCheekPin);
+  leftCheek.attach(leftCheekPin);
 
-  for (int i = 0; i <= 10; i++) {
-    right_cheek.write(rightAngle);
-    left_cheek.write(leftAngle);
-    delay(STEP_DELAY_MS);
+  while (rightCheek.read() != rightAngle || leftCheek.read() != leftAngle) {
+    int currentRight = rightCheek.read();
+    int currentLeft = leftCheek.read();
+
+    if (currentRight < rightAngle) {
+      currentRight++;
+    } else if (currentRight > rightAngle) {
+      currentRight--;
+    }
+
+    if (currentLeft < leftAngle) {
+      currentLeft++;
+    } else if (currentLeft > leftAngle) {
+      currentLeft--;
+    }
+
+    rightCheek.write(currentRight);
+    leftCheek.write(currentLeft);
+    delay(smoothTurnMs);
   }
 
-  right_cheek.detach();
-  left_cheek.detach();
+  rightCheek.detach();
+  leftCheek.detach();
 }
 
 void moveTopServosTo(int rightAngle, int leftAngle) {
-  right_top.attach(RIGHT_TOP_PIN);
-  left_top.attach(LEFT_TOP_PIN);
+  rightTop.attach(rightTopPin);
+  leftTop.attach(leftTopPin);
 
   while (rightTopAngle != rightAngle || leftTopAngle != leftAngle) {
     if (rightTopAngle < rightAngle) {
@@ -73,66 +87,69 @@ void moveTopServosTo(int rightAngle, int leftAngle) {
       leftTopAngle--;
     }
 
-    right_top.write(rightTopAngle);
-    left_top.write(leftTopAngle);
-    delay(TOP_STEP_DELAY_MS);
+    rightTop.write(rightTopAngle);
+    leftTop.write(leftTopAngle);
+    delay(smoothTurnMs);
   }
 
   delay(250);
-  right_top.detach();
-  left_top.detach();
+  rightTop.detach();
+  leftTop.detach();
 }
 
 void moveMiddleTopTo(int angle) {
-  middle_top.attach(MIDDLE_TOP_PIN);
-  middle_top.write(angle);
+  middleTop.attach(middleTopPin);
+  middleTop.write(angle);
   delay(250);
-  middle_top.detach();
+  middleTop.detach();
 }
 
 void moveBottomServoTo(int angle) {
-  bottom_servo.attach(BOTTOM_SERVO_PIN);
-  bottom_servo.write(angle);
+  bottomServo.attach(bottomServoPin);
+  bottomServo.write(angle);
   delay(250);
-  bottom_servo.detach();
+  bottomServo.detach();
+}
+
+void runServoSequence() {
+  if (servoAt50) {
+    moveBothServosTo(rightCheekOpen, leftCheekOpen);
+    delay(middleTopDelayMs);
+    moveMiddleTopTo(middleTopOpen);
+    delay(bottomDelayMs);
+    moveBottomServoTo(bottomServoOpen);
+    delay(topDelayMs);
+    moveTopServosTo(rightTopOpen, leftTopOpen);
+  } else {
+    moveTopServosTo(rightTopClosed, leftTopClosed);
+    delay(topDelayMs);
+    moveBottomServoTo(bottomServoClosed);
+    delay(bottomDelayMs);
+    moveMiddleTopTo(middleTopClosed);
+    delay(middleTopDelayMs);
+    moveBothServosTo(rightCheekClosed, leftCheekClosed);
+  }
 }
 
 void setup() {
-  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  pinMode(buttonPin, INPUT_PULLUP);
 
   // Start by moving once to the closed positions, then detach
-  moveBothServosTo(RIGHT_CHEEK_CLOSED, LEFT_CHEEK_CLOSED);
-  moveMiddleTopTo(MIDDLE_TOP_CLOSED);
-  moveBottomServoTo(BOTTOM_SERVO_CLOSED);
-  moveTopServosTo(RIGHT_TOP_CLOSED, LEFT_TOP_CLOSED);
+  moveBothServosTo(rightCheekClosed, leftCheekClosed);
+  moveMiddleTopTo(middleTopClosed);
+  moveBottomServoTo(bottomServoClosed);
+  moveTopServosTo(rightTopClosed, leftTopClosed);
   delay(500);
 }
 
 void loop() {
-  bool buttonState = digitalRead(BUTTON_PIN);
+  bool buttonState = digitalRead(buttonPin);
 
   if (buttonState == LOW && lastButtonState == HIGH) {
     delay(20);
-    if (digitalRead(BUTTON_PIN) == LOW) {
+    if (digitalRead(buttonPin) == LOW) {
       servoAt50 = !servoAt50;
-
-      if (servoAt50) {
-        moveBothServosTo(RIGHT_CHEEK_OPEN, LEFT_CHEEK_OPEN);
-        delay(MIDDLE_TOP_DELAY_MS);
-        moveMiddleTopTo(MIDDLE_TOP_OPEN);
-        delay(BOTTOM_DELAY_MS);
-        moveBottomServoTo(BOTTOM_SERVO_OPEN);
-        delay(TOP_DELAY_MS);
-        moveTopServosTo(RIGHT_TOP_OPEN, LEFT_TOP_OPEN);
-      } else {
-        moveTopServosTo(RIGHT_TOP_CLOSED, LEFT_TOP_CLOSED);
-        delay(TOP_DELAY_MS);
-        moveBottomServoTo(BOTTOM_SERVO_CLOSED);
-        delay(BOTTOM_DELAY_MS);
-        moveMiddleTopTo(MIDDLE_TOP_CLOSED);
-        delay(MIDDLE_TOP_DELAY_MS);
-        moveBothServosTo(RIGHT_CHEEK_CLOSED, LEFT_CHEEK_CLOSED);
-      }
+      runServoSequence();
     }
   }
 
