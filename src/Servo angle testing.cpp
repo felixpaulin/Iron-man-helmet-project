@@ -18,6 +18,7 @@ Servo leftTop;
 Servo rightTop;
 
 bool servoAt50 = false;
+bool topOpen = false;
 bool lastSectionalState = HIGH;
 bool lastIntegralState = HIGH;
 
@@ -131,10 +132,12 @@ void sectionalOpen() {
 }
 
 void integralOpen() {
-    if (servoAt50) {
-    moveTopServosTo(rightTopOpen, leftTopOpen);
-  } else {
+  if (topOpen) {
     moveTopServosTo(rightTopClosed, leftTopClosed);
+    topOpen = false;
+  } else {
+    moveTopServosTo(rightTopOpen, leftTopOpen);
+    topOpen = true;
   }
 }
 
