@@ -43,19 +43,34 @@ const int rightTopOpen = 180;
 
 int leftTopAngle = leftTopClosed;
 int rightTopAngle = rightTopClosed;
+int leftCheekAngle = leftCheekClosed;
+int rightCheekAngle = rightCheekClosed;
 
 void moveCheekServosTo(int rightAngle, int leftAngle) {
   rightCheek.attach(rightCheekPin);
   leftCheek.attach(leftCheekPin);
 
-  for (int i = 0; i <= 10; i++) {
-    rightCheek.write(rightAngle);
-    leftCheek.write(leftAngle);
+  while (rightCheekAngle != rightAngle || leftCheekAngle != leftAngle) {
+    if (rightCheekAngle < rightAngle) {
+      rightCheekAngle++;
+    } else if (rightCheekAngle > rightAngle) {
+      rightCheekAngle--;
+    }
+
+    if (leftTopAngle < leftAngle) {
+      leftTopAngle++;
+    } else if (leftTopAngle > leftAngle) {
+      leftTopAngle--;
+    }
+
+    rightTop.write(rightTopAngle);
+    leftTop.write(leftTopAngle);
     delay(smoothTurnMs);
   }
 
-  rightCheek.detach();
-  leftCheek.detach();
+  delay(250);
+  rightTop.detach();
+  leftTop.detach();
 }
 
 void moveTopServosTo(int rightAngle, int leftAngle) {
