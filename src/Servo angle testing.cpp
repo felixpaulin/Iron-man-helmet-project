@@ -124,7 +124,7 @@ void moveBottomServoTo(int angle) {
 
 
     bottomServo.write(bottomServoAngle);
-    delay(10);
+    delay(smoothTurnMs);
   }
   delay(250);
 }
@@ -145,7 +145,7 @@ void sectionalOpen() {
     moveTopServosTo(rightTopOpen, leftTopOpen);
   } else {
     moveTopServosTo(rightTopClosed, leftTopClosed);
-    delay(150);
+    delay(topDelayMs);
     moveBottomServoTo(bottomServoClosed);
     delay(bottomDelayMs);
     moveMiddleTopTo(middleTopClosed);
