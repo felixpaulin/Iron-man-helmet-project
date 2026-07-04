@@ -127,7 +127,6 @@ void moveBottomServoTo(int angle) {
     delay(10);
   }
   delay(250);
-  bottomServo.detach();
 }
 
 void setup() {
