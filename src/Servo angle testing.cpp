@@ -22,7 +22,7 @@ bool topOpen = false;
 bool lastSectionalState = HIGH;
 bool lastIntegralState = HIGH;
 
-const int smoothTurnMs = 5;
+const int smoothTurnMs = 3;
 const int middleTopDelayMs = 300;
 const int bottomDelayMs = 300;
 const int topDelayMs = 300;
@@ -94,7 +94,7 @@ void moveTopServosTo(int rightAngle, int leftAngle) {
 
     rightTop.write(rightTopAngle);
     leftTop.write(leftTopAngle);
-    delay(smoothTurnMs);
+    delay(7);
   }
 
   delay(250);
@@ -127,10 +127,6 @@ void moveMiddleTopTo(int angle) {
 void moveBottomServoTo(int angle) {
   bottomServo.attach(bottomServoPin);
 
-  bottomServo.write(bottomServoAngle);
-
-  delay(100);
-
   while (bottomServoAngle != angle) {
     if (bottomServoAngle < angle) {
       bottomServoAngle ++;
@@ -143,6 +139,8 @@ void moveBottomServoTo(int angle) {
     delay(smoothTurnMs);
   }
   delay(250);
+
+  //bottomServo.detach();
 }
 
 void setup() {
@@ -163,6 +161,7 @@ void sectionalOpen() {
     moveTopServosTo(rightTopClosed, leftTopClosed);
     delay(topDelayMs);
     moveBottomServoTo(bottomServoClosed);
+    bottomServo.detach();
     delay(bottomDelayMs);
     moveMiddleTopTo(middleTopClosed);
     delay(middleTopDelayMs);
