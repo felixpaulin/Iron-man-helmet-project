@@ -45,6 +45,7 @@ int leftTopAngle = leftTopClosed;
 int rightTopAngle = rightTopClosed;
 int leftCheekAngle = leftCheekClosed;
 int rightCheekAngle = rightCheekClosed;
+int bottomServoAngle = bottomServoClosed;
 
 void moveCheekServosTo(int rightAngle, int leftAngle) {
   rightCheek.attach(rightCheekPin);
@@ -109,7 +110,17 @@ void moveMiddleTopTo(int angle) {
 
 void moveBottomServoTo(int angle) {
   bottomServo.attach(bottomServoPin);
-  bottomServo.write(angle);
+  while (bottomServoAngle != angle) {
+    if (bottomServoAngle < angle) {
+      bottomServoAngle++;
+    } else if (bottomServoAngle > angle) {
+      bottomServoAngle--;
+    }
+
+
+    bottomServo.write(bottomServoAngle);
+    delay(smoothTurnMs);
+  }
   delay(250);
   bottomServo.detach();
 }
