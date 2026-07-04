@@ -44,7 +44,7 @@ const int rightTopOpen = 180;
 int leftTopAngle = leftTopClosed;
 int rightTopAngle = rightTopClosed;
 
-void moveBothServosTo(int rightAngle, int leftAngle) {
+void moveCheekServosTo(int rightAngle, int leftAngle) {
   rightCheek.attach(rightCheekPin);
   leftCheek.attach(leftCheekPin);
 
@@ -104,7 +104,7 @@ void setup() {
   pinMode(integralPin, INPUT_PULLUP);
 
   // Start by moving once to the closed positions, then detach
-  moveBothServosTo(rightCheekClosed, leftCheekClosed);
+  moveCheekServosTo(rightCheekClosed, leftCheekClosed);
   moveMiddleTopTo(middleTopClosed);
   moveBottomServoTo(bottomServoClosed);
   moveTopServosTo(rightTopClosed, leftTopClosed);
@@ -113,7 +113,7 @@ void setup() {
 
 void sectionalOpen() {
   if (helmetOpen) {
-    moveBothServosTo(rightCheekOpen, leftCheekOpen);
+    moveCheekServosTo(rightCheekOpen, leftCheekOpen);
     delay(middleTopDelayMs);
     moveMiddleTopTo(middleTopOpen);
     delay(bottomDelayMs);
@@ -127,7 +127,7 @@ void sectionalOpen() {
     delay(bottomDelayMs);
     moveMiddleTopTo(middleTopClosed);
     delay(middleTopDelayMs);
-    moveBothServosTo(rightCheekClosed, leftCheekClosed);
+    moveCheekServosTo(rightCheekClosed, leftCheekClosed);
   }
 }
 
