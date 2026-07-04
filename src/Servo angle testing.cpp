@@ -58,20 +58,20 @@ void moveCheekServosTo(int rightAngle, int leftAngle) {
       rightCheekAngle--;
     }
 
-    if (leftTopAngle < leftAngle) {
-      leftTopAngle++;
-    } else if (leftTopAngle > leftAngle) {
-      leftTopAngle--;
+    if (leftCheekAngle < leftAngle) {
+      leftCheekAngle++;
+    } else if (leftCheekAngle > leftAngle) {
+      leftCheekAngle--;
     }
 
-    rightTop.write(rightTopAngle);
-    leftTop.write(leftTopAngle);
+    rightCheek.write(rightCheekAngle);
+    leftCheek.write(leftCheekAngle);
     delay(smoothTurnMs);
   }
 
   delay(250);
-  rightTop.detach();
-  leftTop.detach();
+  rightCheek.detach();
+  leftCheek.detach();
 }
 
 void moveTopServosTo(int rightAngle, int leftAngle) {
