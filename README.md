@@ -242,13 +242,13 @@ Future Upgrades
 
 This is an independent hobby project.
 
-No affiliation with Marvel, Disney, or AutoKing.
+No affiliation with Marvel or AutoKing.
 
 Proceed carefully when modifying commercial hardware.
 
-Servos, wiring, and mechanical systems can be damaged if incorrect angles or motion limits are used.
+Servos, wiring, other electrincs and mechanical systems can be damaged if incorrect angles, motion limits or voltages are used.
 
-Always test movements slowly and piece by piece, never mvoe all the servos together on the first try, if you have a AutoKing MK5 helmet you can use this code.
+Always test movements slowly and piece by piece, never move all the servos together on the first try, if you have a AutoKing MK5 helmet you can use this code.
 
 ---
 
