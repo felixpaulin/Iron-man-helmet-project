@@ -94,7 +94,7 @@ void moveTopServosTo(int rightAngle, int leftAngle) {
 
     rightTop.write(rightTopAngle);
     leftTop.write(leftTopAngle);
-    delay(7);
+    delay(6);
   }
 
   delay(150);
