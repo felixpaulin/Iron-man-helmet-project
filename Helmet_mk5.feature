@@ -1,6 +1,7 @@
 Feature: Custom ESP32 AutoKing MK5 Helmet Controller
 
   Background:
+
     Given the helmet controller is powered
     
     And all servos are initialized
@@ -12,7 +13,7 @@ Feature: Custom ESP32 AutoKing MK5 Helmet Controller
 
     Given the helmet is closed
 
-    When the sectional touch pad is pressed
+    When the sectional touch pad is activated
 
     Then both cheek servos should open
 
@@ -20,7 +21,7 @@ Feature: Custom ESP32 AutoKing MK5 Helmet Controller
 
     And the bottom faceplate should lift
 
-    And the top assembly should move upward
+    And the upper assembly should move upward
 
     And the helmet state should become open
 
@@ -29,9 +30,9 @@ Feature: Custom ESP32 AutoKing MK5 Helmet Controller
 
     Given the helmet is open
 
-    When the sectional touchpad is pressed again
+    When the sectional touch pad is activated again
 
-    Then the top assembly should lower
+    Then the upper assembly should lower
 
     And the bottom faceplate should lower
 
@@ -46,7 +47,7 @@ Feature: Custom ESP32 AutoKing MK5 Helmet Controller
 
     Given the top assembly is closed
 
-    When the integral touch pad is pressed
+    When the integral touch pad is activated
 
     Then both top servos should move upward
 
@@ -57,7 +58,7 @@ Feature: Custom ESP32 AutoKing MK5 Helmet Controller
 
     Given the top assembly is open
 
-    When the integral touch pad is pressed again
+    When the integral touch pad is activated again
 
     Then both top servos should move downward
 
@@ -66,9 +67,9 @@ Feature: Custom ESP32 AutoKing MK5 Helmet Controller
 
   Scenario: TinyML voice sectional opening
 
-    Given the esp32 s3 is installed 
-    
-    And tinyML is enabled
+    Given the ESP32-S3 is installed
+
+    And TinyML is enabled
 
     And the helmet is closed
 
@@ -79,9 +80,9 @@ Feature: Custom ESP32 AutoKing MK5 Helmet Controller
 
   Scenario: TinyML voice sectional closing
 
-    Given the esp32 s3 is installed 
-    
-    And tinyML is enabled
+    Given the ESP32-S3 is installed
+
+    And TinyML is enabled
 
     And the helmet is open
 
@@ -89,26 +90,31 @@ Feature: Custom ESP32 AutoKing MK5 Helmet Controller
 
     Then the sectional closing sequence should execute
 
-  Scenario: TinyML voice intergal opening
 
-    Given TinyML is enabled
+  Scenario: TinyML voice integral opening
+
+    Given the ESP32-S3 is installed
+
+    And TinyML is enabled
 
     And the helmet is closed
 
     When the user says "Open Helmet"
 
-    Then the integral opening should begin
+    Then the integral opening sequence should execute
 
 
-  Scenario: TinyML voice intergal closing
+  Scenario: TinyML voice integral closing
 
-    Given TinyML is enabled
+    Given the ESP32-S3 is installed
+
+    And TinyML is enabled
 
     And the helmet is open
 
     When the user says "Close Helmet"
 
-    Then the integral closing should begin
+    Then the integral closing sequence should execute
 
 
   Scenario: Servo anti-buzz logic
@@ -130,27 +136,27 @@ Feature: Custom ESP32 AutoKing MK5 Helmet Controller
 
     Then the servo should remain attached
 
-    And the helmet should stabilize
+    And the mechanism should stabilize
 
     And the servo should detach afterwards
 
 
-  Scenario: LED eyes red
+  Scenario: LED eye control
 
     Given the ESP32-S3 is installed
 
-    When the user requests red eyes via tinyML
+    When the user requests red eyes
 
     Then the eye LEDs should become red
 
 
-  Scenario: LED eyes blue/white-ish
+  Scenario: LED eye control blue
 
     Given the ESP32-S3 is installed
 
-    When the user requests blue eyes via tinyML
+    When the user requests blue eyes
 
-    Then the eye LEDs should become a blue/white-ish colour
+    Then the eye LEDs should become blue-white
 
 
   Scenario: Future LLM interaction
