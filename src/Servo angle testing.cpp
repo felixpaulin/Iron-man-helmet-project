@@ -31,9 +31,9 @@ bool lastIntegralState = HIGH;
 
 // smooth turn for servo speed and delay for time inbtween different servos moving
 const int smoothTurnMs = 2;
-const int middleTopDelayMs = 200;
-const int bottomDelayMs = 200;
-const int topDelayMs = 200;
+const int middleTopDelayMs = 100;
+const int bottomDelayMs = 150;
+const int topDelayMs = 150;
 
 // Raw per-servo values so you can manually control each servo.
 const int rightCheekClosed = 117;
@@ -195,7 +195,7 @@ void integralOpen() {
   }
 }
 
-// a loop that actually calls the functions if a touch pad is touched in order to open or close the helemt in the two different ways.
+// the loop that actually calls the functions if a touch pad is touched in order to open or close the helemt in the two different ways.
 void loop() {
   bool sectionalState = digitalRead(sectionalPin);
   bool integralState = digitalRead(integralPin);
