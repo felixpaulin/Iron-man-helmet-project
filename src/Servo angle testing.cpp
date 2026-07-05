@@ -22,10 +22,10 @@ bool topOpen = false;
 bool lastSectionalState = HIGH;
 bool lastIntegralState = HIGH;
 
-const int smoothTurnMs = 3;
-const int middleTopDelayMs = 300;
-const int bottomDelayMs = 300;
-const int topDelayMs = 300;
+const int smoothTurnMs = 2;
+const int middleTopDelayMs = 200;
+const int bottomDelayMs = 200;
+const int topDelayMs = 200;
 
 // Raw per-servo values so you can manually control each side.
 const int rightCheekClosed = 117;
@@ -70,7 +70,7 @@ void moveCheekServosTo(int rightAngle, int leftAngle) {
     delay(smoothTurnMs);
   }
 
-  delay(250);
+  delay(150);
   rightCheek.detach();
   leftCheek.detach();
 }
@@ -97,7 +97,7 @@ void moveTopServosTo(int rightAngle, int leftAngle) {
     delay(7);
   }
 
-  delay(250);
+  delay(150);
   rightTop.detach();
   leftTop.detach();
 }
@@ -120,7 +120,7 @@ void moveMiddleTopTo(int angle) {
     middleTop.write(middleTopAngle);
     delay(smoothTurnMs);
   }
-  delay(250);
+  delay(150);
   middleTop.detach();
 }
 
@@ -138,7 +138,7 @@ void moveBottomServoTo(int angle) {
     bottomServo.write(bottomServoAngle);
     delay(smoothTurnMs);
   }
-  delay(250);
+  delay(150);
 
   //bottomServo.detach();
 }
