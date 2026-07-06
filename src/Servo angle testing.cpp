@@ -142,6 +142,19 @@ void moveCheeksAndMiddleTopTo(int rightAngle, int leftAngle, int middleAngle) {
   leftCheek.attach(leftCheekPin);
   middleTop.attach(middleTopPin);
 
+  // calculate how many steps the cheeks need to move
+  // abs() returns the positive distance regardless of direction
+  int cheekSteps = max(abs(rightAngle - rightCheekAngle), abs(leftAngle - leftCheekAngle));
+  // calculate how many steps the middle top needs to move
+  int middleSteps = abs(middleAngle - middleTopAngle);
+
+  // if the middle top has to travel farther, increase its per-loop step size
+  // so it can finish around the same time as the cheeks
+  int middleStep = 1;
+  if (cheekSteps > 0) {
+    middleStep = max(1, (middleSteps + cheekSteps - 1) / cheekSteps);
+  }
+
   while (rightCheekAngle != rightAngle || leftCheekAngle != leftAngle || middleTopAngle != middleAngle) {
     if (rightCheekAngle < rightAngle) {
       rightCheekAngle++;
@@ -156,11 +169,12 @@ void moveCheeksAndMiddleTopTo(int rightAngle, int leftAngle, int middleAngle) {
     }
 
     if (middleTopAngle < middleAngle) {
-      middleTopAngle++;
+      middleTopAngle = min(middleTopAngle + middleStep, middleAngle);
     } else if (middleTopAngle > middleAngle) {
-      middleTopAngle--;
+      middleTopAngle = max(middleTopAngle - middleStep, middleAngle);
     }
 
+    // write the updated angles to the servos and wait one loop interval
     rightCheek.write(rightCheekAngle);
     leftCheek.write(leftCheekAngle);
     middleTop.write(middleTopAngle);
