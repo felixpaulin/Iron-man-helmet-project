@@ -173,7 +173,7 @@ void moveCheeksAndMiddleTopTo(int rightAngle, int leftAngle, int middleAngle) {
     } else if (middleTopAngle > middleAngle) {
       middleTopAngle = max(middleTopAngle - middleStep, middleAngle);
     }
-
+    
     // write the updated angles to the servos and wait one loop interval
     rightCheek.write(rightCheekAngle);
     leftCheek.write(leftCheekAngle);
