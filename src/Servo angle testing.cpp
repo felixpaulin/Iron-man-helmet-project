@@ -30,7 +30,7 @@ bool lastSectionalState = HIGH;
 bool lastIntegralState = HIGH;
 
 // smooth turn for servo speed and delay for time inbtween different servos moving
-const int smoothTurnMs = 2;
+const int smoothTurnMs = 3;
 const int middleTopDelayMs = 100;
 const int bottomDelayMs = 150;
 const int topDelayMs = 150;
@@ -43,7 +43,7 @@ const int leftCheekOpen = 117;
 const int middleTopClosed = 150;
 const int middleTopOpen = 30;
 const int bottomServoClosed = 38;
-const int bottomServoOpen = 128;
+const int bottomServoOpen = 130;
 const int leftTopClosed = 20;
 const int leftTopOpen = 180;
 const int rightTopClosed = 20;
@@ -173,12 +173,12 @@ void moveCheeksAndMiddleTopTo(int rightAngle, int leftAngle, int middleAngle) {
     } else if (middleTopAngle > middleAngle) {
       middleTopAngle = max(middleTopAngle - middleStep, middleAngle);
     }
-    
+
     // write the updated angles to the servos and wait one loop interval
     rightCheek.write(rightCheekAngle);
     leftCheek.write(leftCheekAngle);
     middleTop.write(middleTopAngle);
-    delay(smoothTurnMs);
+    delay(4);
   }
 
   delay(150);
@@ -203,7 +203,6 @@ void moveBottomServoTo(int angle) {
     delay(smoothTurnMs);
   }
   delay(150);
-
 }
 
 // setup for the touch pads
