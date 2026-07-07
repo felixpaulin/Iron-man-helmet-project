@@ -136,7 +136,7 @@ void moveMiddleTopTo(int angle) {
   middleTop.detach();
 }
 
-// move cheek servos and middle top in sync, while keeping separate control of middle top speed
+// move cheek servos and middle top in sync, while keeping separate control of middle top speed via a calculation based off how much it has to travel
 void moveCheeksAndMiddleTopTo(int rightAngle, int leftAngle, int middleAngle) {
   rightCheek.attach(rightCheekPin);
   leftCheek.attach(leftCheekPin);
