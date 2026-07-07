@@ -215,8 +215,9 @@ void setup() {
 // It moves the cheek servos and the middle top servo in sync, while keeping those motions in separate helper functions.
 void sectionalOpen() {
   if (helmetOpen) {
-    moveCheeksAndMiddleTopTo(rightCheekOpen, leftCheekOpen, middleTopOpen);
-    delay(bottomDelayMs);
+    moveCheekServosTo(rightCheekOpen, leftCheekOpen);
+    delay(middleTopDelayMs);
+    moveMiddleTopTo(middleTopOpen);    delay(bottomDelayMs);
     moveBottomServoTo(bottomServoOpen);
     delay(topDelayMs);
     moveTopServosTo(rightTopOpen, leftTopOpen);
