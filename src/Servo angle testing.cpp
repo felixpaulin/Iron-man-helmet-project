@@ -30,7 +30,7 @@ bool lastSectionalState = HIGH;
 bool lastIntegralState = HIGH;
 
 // smooth turn for servo speed and delay for time inbtween different servos moving
-const int smoothTurnMs = 3;
+const int smoothTurnMs = 2;
 const int middleTopDelayMs = 100;
 const int bottomDelayMs = 150;
 const int topDelayMs = 150;
