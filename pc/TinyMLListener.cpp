@@ -39,6 +39,8 @@ int main()
 
     SerialPort helmet("COM5");
 
+
+while (true) {
     if (!helmet.open())
     {
         std::cout << "Failed to connect to helmet.\n";
@@ -74,4 +76,6 @@ int main()
     helmet.close();
 
     return 0;
+}
+
 }
